@@ -4,19 +4,26 @@ NAME := libasm.l
 # * DIRECTORIES ************************************************************** #
 SRC_DIR := src
 OBJ_DIR := obj
+TST_DIR	:= test
 
 # * FILES ******************************************************************** #
 SRC :=
 vpath %.s $(SRC_DIR)/
 SRC += ft_strlen.s
-SRC += ft_strcpy.s
+# SRC += ft_strcpy.s
 SRC += ft_strcmp.s
-SRC += ft_write.s
+# SRC += ft_write.s
+# SRC += ft_read.s
 
 OBJ := $(SRC:.s=.o)
 OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))
 
 DEP := $(OBJ:.o=.d)
+
+TST	:= $(SRC:.s=.c)
+TST := $(addprefix $(TST_DIR)/test_, $(TST))
+
+TST_OUT := $(TST:.c=.out)
 
 # * TOOLS ******************************************************************** #
 CA := nasm
@@ -70,9 +77,16 @@ clean:
 fclean: clean
 	$(RM) $(NAME)
 
-exec:
-	$(CC) $(CPPFLAGS) main.c $(LDFLAGS)
+test: $(NAME) $(TST_OUT)
 
+%.out:%.c
+	$(CC) -Itest -I. $< $(LDFLAGS) -o $@
+	$@ | tee $(patsubst test/test_%.out,test/%.log,$@)
+
+cleantest:
+	$(RM) $(TST_OUT) $(patsubst test/test_%.out,test/%.log,$(TST_OUT))
+
+	
 re: fclean all
 
 .PHONY: all clean fclean re
