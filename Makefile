@@ -10,9 +10,9 @@ TST_DIR	:= test
 SRC :=
 vpath %.s $(SRC_DIR)/
 SRC += ft_strlen.s
-# SRC += ft_strcpy.s
+SRC += ft_strcpy.s
 SRC += ft_strcmp.s
-# SRC += ft_write.s
+SRC += ft_write.s
 # SRC += ft_read.s
 
 OBJ := $(SRC:.s=.o)
@@ -46,8 +46,12 @@ LDFLAGS :=
 
 ARFLAGS := rsc
 
+CFLAGS :=
+
 LDFLAGS :=
 LDFLAGS += -L. -l:libasm.l
+LDFLAGS += -z noexecstack	# prevents ld complainign about missing.not.GNU-stack
+# https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ffcf9c5700e49c0aee42dcba9a12ba21338e8136 
 
 ifdef DEBUG
 	CAFLAGS += -g
@@ -76,18 +80,22 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
+	
+re: fclean all
 
 test: $(NAME) $(TST_OUT)
 
 %.out:%.c
-	$(CC) -Itest -I. $< $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) -Itest -I. $< $(LDFLAGS) -o $@
 	$@ | tee $(patsubst test/test_%.out,test/%.log,$@)
 
 cleantest:
-	$(RM) $(TST_OUT) $(patsubst test/test_%.out,test/%.log,$(TST_OUT))
+	$(RM) $(TST_OUT)
 
-	
-re: fclean all
+fcleantest: cleantest
+	$(RM)  $(patsubst test/test_%.out,test/%.log,$(TST_OUT))
 
-.PHONY: all clean fclean re
+retest: fcleantest test
+
+.PHONY: all clean fclean re test cleantest fcleantest retest
 # **************************************************************************** #

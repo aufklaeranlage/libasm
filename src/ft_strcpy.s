@@ -11,6 +11,7 @@ ft_strcpy:
 .loop:
 		mov		al,[rsi + r8]	; load char into rax
 		mov		[rdi + r8],al	;
+		add		r8,1
 		cmp		al,0			; check for end of string
 		jne		.loop
 		mov		rax,rdi			; return dest

@@ -15,8 +15,10 @@ ft_write:
 		ret
 .error:
 		neg		rax					; see syscall (2). return needs to be negated to hold the proper error number
-		mov		rdi,rax				; save error number
-		call	__errno_location	; get location of errno
-		mov		[rax],rdi			; set errno to saved error number
+		push	rax					; save error number
+		call	__errno_location WRT ..plt	; get location of errno
+		; uses WRT ..plt to be position independent. See NASM Manula 11.2.5
+		pop		rdi					; restore error number
+		mov		[rax],edi			; set errno to saved error number (DWORD size)
 		mov		rax,-1
 		ret
