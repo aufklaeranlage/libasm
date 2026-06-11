@@ -13,7 +13,8 @@ SRC += ft_strlen.s
 SRC += ft_strcpy.s
 SRC += ft_strcmp.s
 SRC += ft_write.s
-# SRC += ft_read.s
+SRC += ft_read.s
+SRC += ft_strdup.s
 
 OBJ := $(SRC:.s=.o)
 OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))
@@ -50,15 +51,16 @@ CFLAGS :=
 
 LDFLAGS :=
 LDFLAGS += -L. -l:libasm.l
-LDFLAGS += -z noexecstack	# prevents ld complainign about missing.not.GNU-stack
+LDFLAGS += -z noexecstack # prevents ld complainign about missing .not.GNU-stack
 # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ffcf9c5700e49c0aee42dcba9a12ba21338e8136 
 
 ifdef DEBUG
-	CAFLAGS += -g
+	CAFLAGS += -g -F dwarf
 	CAFLAGS += -O0
+	CFLAGS	+= -g3
 else
 # Minimize branch offsets, and signed immediate bytes, by overriding size specification unless strict is used
-	CAFLAGS += -Oxv
+	CAFLAGS += -Ox
 endif
 
 # * RULES ******************************************************************** #
@@ -85,9 +87,9 @@ re: fclean all
 
 test: $(NAME) $(TST_OUT)
 
-%.out:%.c
-	$(CC) $(CFLAGS) -Itest -I. $< $(LDFLAGS) -o $@
-	$@ | tee $(patsubst test/test_%.out,test/%.log,$@)
+%.out: %.c
+	$(CC) $(CFLAGS) -Itest -Iinc $< $(LDFLAGS) -o $@
+	$@ | tee $(patsubst test/test_%.out,test/%.log,$@) 1>/dev/null
 
 cleantest:
 	$(RM) $(TST_OUT)
@@ -95,7 +97,7 @@ cleantest:
 fcleantest: cleantest
 	$(RM)  $(patsubst test/test_%.out,test/%.log,$(TST_OUT))
 
-retest: fcleantest test
+retest: re fcleantest test
 
 .PHONY: all clean fclean re test cleantest fcleantest retest
 # **************************************************************************** #

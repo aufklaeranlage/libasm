@@ -1,0 +1,4 @@
+[30;47m --- test_functionality --- [0m
+src: Hello, World!, buf1: Hello, World!, buf2: Hello, World!, ret: 0x7ffcac1e2420 ft_ret: 0x7ffcac1e23b0
+[30;47m --- test_zero_len --- [0m
+src: , buf1: , buf2: , ret: 0x7ffcac1e2430 ft_ret: 0x7ffcac1e23c0

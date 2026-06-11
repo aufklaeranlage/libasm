@@ -13,7 +13,6 @@ static bool	test_ebadf_invalid(void) {
 	size_t	ret;
 	size_t	ft_ret;
 	int	invalid_fd = 69;
-	int	not_open_for_write = open("Makefile", O_RDONLY);
 
 	errno = 0;
 	ret = write(invalid_fd, "Hello, World!", 13);

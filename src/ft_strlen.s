@@ -1,23 +1,19 @@
-; ft_strlen(const char *) rdi: QWORD
+; size_t ft_strlen(const char *)
+; return: QWORD, rdi: QWORD
 
 		BITS	64
 
 		global	ft_strlen:function
+
 		section	.text
-
 ft_strlen:
-		mov		r9,rsi			; save rsi to be able to use it for prefix free sized comparison
-
-		mov		rax,0			; use rax as counter
-		mov		rsi,0			; init rsi to 0 for comparsion as BYTE 0
+	xor		rax, rax	; zero rax and use as counter
 
 .loop:
-		mov		sil,[rdi + rax]
-		cmp		sil,0			; check byte at rdi against sil
-		je		.break	
-		add		rax,1			; increase string length returned
-		jmp		.loop
+	cmp		BYTE rdi[rax], 0x0
+	je		.end
+	add		rax, 0x1
+	jmp		.loop
 
-.break:
-		mov		rsi,r9
-		ret
+.end:
+	ret

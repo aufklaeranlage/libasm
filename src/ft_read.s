@@ -1,22 +1,25 @@
-; QWORD	ft_read(int fd, const void *buf, size_t count)
-; rdi: fd, rsi: *buf, rdx: count
-; Copy of read (man 2)
+; ssize_t ft_read(int fd, const void *buf, size_t count)
+; return: QWORD, rdi: DWORD, rsi: QWORD, rdx: QWORD
+
 		BITS 64
 
 		global	ft_read:function
 
 		extern	__errno_location
+
 		section	.text
 ft_read:
-		mov		rax,0
+		xor		rax, rax
 		syscall
-		cmp		rax,0
+		cmp		rax, 0x0
 		jl		.error
 		ret
 .error:
 		neg		rax					; see syscall (2). return needs to be negated to hold the proper error number
-		mov		rdi,rax				; save error number
-		call	__errno_location	; get location of errno
-		mov		[rax],rdi			; set errno to saved error number
-		mov		rax,-1
+		push	rax					; save error number
+		call	__errno_location WRT ..plt	; get location of errno
+		; uses WRT ..plt to be position independent. See NASM Manual 11.2.5
+		pop		rdi					; restore error number
+		mov		[rax], rdi			; set errno to saved error number
+		mov		rax, -1
 		ret

@@ -1,0 +1,4 @@
+[30;47m --- test_norm --- [0m
+str: Hello, World!, ret: 13, ft_ret: 13
+[30;47m --- test_zero --- [0m
+str: , ret: 0, ft_ret: 0

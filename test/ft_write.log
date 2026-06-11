@@ -1,0 +1,9 @@
+[30;47m --- test_ebadf_invalid --- [0m
+write(): fd: 69,  ret: -1, strerror: Bad file descriptor
+ft_write(): fd: 69, ft_ret: -1, strerror: Bad file descriptor
+[30;47m --- test_ebadf_rdonly --- [0m
+write(): fd: 3, ret: -1, strerror: Bad file descriptor
+ft_write(): fd: 3, ft_ret: -1, strerror: Bad file descriptor
+[30;47m --- test_efault --- [0m
+write(): fd: 4, ret: -1, strerror: Bad address
+ft_write(): fd: 4, ft_ret: -1, strerror: Bad address

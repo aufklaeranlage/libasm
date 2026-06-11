@@ -1,0 +1,4 @@
+[30;47m --- test_norm --- [0m
+str: Hello, World!, strdup: Hello, World!, ft_strdup: Hello, World!
+[30;47m --- test_zero --- [0m
+str: , strdup: , ft_strdup: 

@@ -1,0 +1,14 @@
+[30;47m --- test_above --- [0m
+str1: Hello, World!, str2: World, Hello!, ret: -15 ft_ret: -15
+[30;47m --- test_below --- [0m
+str1: World, Hello!, str2: Hello, World!, ret: 15 ft_ret: 15
+[30;47m --- test_zero --- [0m
+str1: Hello, World!, str2: Hello, World!, ret: 0 ft_ret: 0
+[30;47m --- test_first_shorter --- [0m
+str1: Hello!, str2: Hello, World!, ret: -11 ft_ret: -11
+[30;47m --- test_first_longer --- [0m
+str1: Hello, World!, str2: Hello!, ret: 11 ft_ret: 11
+[30;47m --- test_first_empty --- [0m
+str1: , str2: Hello, World!, ret: -72 ft_ret: -72
+[30;47m --- test_second_empty --- [0m
+str1: Hello, World!, str2: , ret: 72 ft_ret: 72

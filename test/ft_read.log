@@ -1,0 +1,12 @@
+[30;47m --- test_ebadf_invalid --- [0m
+read(): fd: 69,  ret: -1, strerror: Bad file descriptor
+ft_read(): fd: 69, ft_ret: -1, strerror: Bad file descriptor
+[30;47m --- test_ebadf_wronly --- [0m
+read(): fd: 3, ret: -1, strerror: Bad file descriptor
+ft_read(): fd: 3, ft_ret: -1, strerror: Bad file descriptor
+[30;47m --- test_eisdir --- [0m
+read(): fd: 4, ret: -1, strerror: Is a directory
+ft_read(): fd: 4, ft_ret: -1, strerror: Is a directory
+[30;47m --- test_read --- [0m
+read(): fd: 4, buf: # ***********, ret: 13, strerror: Success
+ft_read(): fd: 4, buf: # ***********, ft_ret: 13, strerror: Success
