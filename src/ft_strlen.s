@@ -1,14 +1,19 @@
-	global ft_strlen
+; size_t ft_strlen(const char *)
+; return: QWORD, rdi: QWORD
 
-	section .text
+		BITS	64
 
-; size_t ft_strlen(char *str) str: RDI
+		global	ft_strlen:function
+
+		section	.text
 ft_strlen:
 	xor		rax, rax	; zero rax and use as counter
-_loop:
+
+.loop:
 	cmp		BYTE rdi[rax], 0x0
-	je		_end
+	je		.end
 	add		rax, 0x1
-	jmp		_loop
-_end:
+	jmp		.loop
+
+.end:
 	ret

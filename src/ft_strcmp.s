@@ -1,19 +1,26 @@
-	global ft_strcmp
+; int ft_strcmp(const char *s1, const char *s2) rdi: QWORD, rsi: QWORD
+; return: DWORD, rdi: QWORD, rsi: QWORD
 
-	section .text
+		BITS	64
 
-; int ft_strcmp(const char *s1, const char *s2) s1: RDI, s2: RSI
+		global	ft_strcmp:function
+
+		section	.text
 ft_strcmp:
+	push	r8 ; save register
 	xor		rax, rax
 	xor		rcx, rcx
-_loop:
-	mov		al, BYTE rdi[rcx]
-	sub		al, BYTE rsi[rcx]
-	jne		_end
-	cmp		BYTE rdi[rax], 0x0
-	je		_end
-	add		rcx, 0x1
-	jmp		_loop
-_end:
-	ret
 
+.loop:
+	mov		al, BYTE rdi[rcx]
+	mov		r8b, BYTE rsi[rcx]
+	sub		eax, r8d
+	jne		.end
+	cmp		BYTE rdi[rcx], 0x0
+	je		.end
+	add		rcx, 0x1
+	jmp		.loop
+
+.end:
+	pop		r8 ; restore register
+	ret

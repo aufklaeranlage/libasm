@@ -1,75 +1,104 @@
 # **************************************************************************** #
-NAME := libasm.a
+NAME := libasm.l
 
 # * DIRECTORIES ************************************************************** #
-SRC_DIR		:= src
-OBJ_DIR		:= obj
-INC_DIR		:= inc
-TEST_DIR	:= test
+SRC_DIR := src
+OBJ_DIR := obj
+TST_DIR	:= test
 
 # * FILES ******************************************************************** #
-SRCS	:=
-vpath %.s $(SRC_DIR)
-SRCS	+= ft_strlen.s
-SRCS	+= ft_strcpy.s
-SRCS	+= ft_strcmp.s
-SRCS	+= ft_write.s
+SRC :=
+vpath %.s $(SRC_DIR)/
+SRC += ft_strlen.s
+SRC += ft_strcpy.s
+SRC += ft_strcmp.s
+SRC += ft_write.s
+SRC += ft_read.s
+SRC += ft_strdup.s
 
-OBJS	:= $(SRCS:.s=.o)
-OBJS	:= $(addprefix $(OBJ_DIR)/,$(OBJS))
+OBJ := $(SRC:.s=.o)
+OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))
 
-vpath %.c $(TEST_DIR)
-TESTS	:= $(SRCS:.s=_test.c)
+DEP := $(OBJ:.o=.d)
 
-TEST_OBJS	:= $(TESTS:.c=.o)
-TEST_OBJS	:= $(addprefix $(OBJ_DIR)/,$(TEST_OBJS))
+TST	:= $(SRC:.s=.c)
+TST := $(addprefix $(TST_DIR)/test_, $(TST))
 
-TESTS	:= $(addprefix $(TEST_DIR)/,$(TESTS))
+TST_OUT := $(TST:.c=.out)
 
 # * TOOLS ******************************************************************** #
-CASM	:= nasm
-CC		:= cc
-AR		:= ar
-LD		:= gcc
-RM		:= rm -rf
-MKDIR	:= mkdir
+CA := nasm
+CC := cc
+LD := ld
+AR := ar
 
-# * FLAGS ******************************************************************** #
-CFLAGS	?=
-CFLAGS	+= -f elf64
+RM := rm -rf
+MKDIR := mkdir
 
-CPPFLAGS	?=
+# * FLAGS *************************************************************************** #
+CPPFLAGS := 
 
-ARFLAGS	:= rcs
+CAFLAGS :=
+CAFLAGS += -w+error=all
+CAFLAGS += -f elf64
+CAFLAGS += -MP
 
-LDFLAGS	?=
+LDFLAGS :=
+
+ARFLAGS := rsc
+
+CFLAGS :=
+
+LDFLAGS :=
+LDFLAGS += -L. -l:libasm.l
+LDFLAGS += -z noexecstack # prevents ld complainign about missing .not.GNU-stack
+# https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ffcf9c5700e49c0aee42dcba9a12ba21338e8136 
+
+ifdef DEBUG
+	CAFLAGS += -g -F dwarf
+	CAFLAGS += -O0
+	CFLAGS	+= -g3
+else
+# Minimize branch offsets, and signed immediate bytes, by overriding size specification unless strict is used
+	CAFLAGS += -Ox
+endif
 
 # * RULES ******************************************************************** #
+
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	$(AR) $(ARFLAGS) $@ $(OBJS)
+$(NAME): $(OBJ)
+	$(AR) $(ARFLAGS) $@ $(OBJ)
+
+$(OBJ_DIR)/%.o: %.s $(OBJ_DIR)
+	$(CA) $(CPPFLAGS) $(CAFLAGS) -MD $(@:.o=.d) -o $@ $<
 
 $(OBJ_DIR):
 	$(MKDIR) $@
 
-$(OBJ_DIR)/%.o: %.s $(OBJ_DIR)
-	$(CASM) $(CPPFLAGS) $(CFLAGS) -o $@ $<
-
-test: $(TEST_OBJS)
-
-$(OBJ_DIR)/%.o: %.c $(OBJ_DIR) $(NAME)
-	$(CC) -I$(INC_DIR) -c -o $@ $<
-	$(LD) -o $(@:$(OBJ_DIR)/ft_%_test.o=%_test) $(@) $(@:%_test.o=%.o) -L. -l:$(NAME)
-
-test_%: $(OBJ_DIR)/ft_%_test.o
-
 clean:
+	$(RM) $(OBJ)
 	$(RM) $(OBJ_DIR)
 
 fclean: clean
 	$(RM) $(NAME)
-
+	
 re: fclean all
 
-.PHONY: all clean fclean re
+test: $(NAME) $(TST_OUT)
+
+%.out: %.c
+	$(CC) $(CFLAGS) -Itest -Iinc $< $(LDFLAGS) -o $@
+	$@ | tee $(patsubst test/test_%.out,test/%.log,$@) 1>/dev/null
+
+cleantest:
+	$(RM) $(TST_OUT)
+
+fcleantest: cleantest
+	$(RM)  $(patsubst test/test_%.out,test/%.log,$(TST_OUT))
+
+retest: re fcleantest test
+
+.PHONY: all clean fclean re test cleantest fcleantest retest
+
+# **************************************************************************** #

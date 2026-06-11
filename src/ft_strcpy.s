@@ -1,17 +1,22 @@
-	global ft_strcpy
+; char *ft_strcpy(char * restrict dest, const const * restrict src)
+; return: QWORD, rdi: QWORD, rsi: QWORD
 
-	section .text
+		BITS	64
 
-; char *ft_strcpy(char *dest, char *src) dest: RDI, src: RSI
+		global	ft_strcpy:function
+		
+		section	.text
 ft_strcpy:
 	xor		rax, rax
-_loop:
+
+.loop:
 	cmp		BYTE rsi[rax], 0x0
 	mov		dl, BYTE rsi[rax]
 	mov		BYTE rdi[rax], dl
-	je		_end
+	je		.end
 	add		rax, 0x1
-	jmp		_loop
-_end:
+	jmp		.loop
+
+.end:
 	mov		rax, rdi
 	ret
