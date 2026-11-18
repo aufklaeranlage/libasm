@@ -15,7 +15,7 @@ ft_strdup:
 	call	ft_strlen ; get the length of the string
 	mov		rdi, rax ; set up the length of the string as byte count to allocate
 	add		rdi, 0x1
-	call	malloc
+	call	malloc wrt ..plt
 	cmp		rax, 0x0 ;
 	je		.error
 	mov		rdi, rax ; set up new allocated string as dest for ft_strcpy

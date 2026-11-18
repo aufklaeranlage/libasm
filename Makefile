@@ -17,6 +17,7 @@ SRC += ft_read.s
 SRC += ft_strdup.s
 
 SRC += ft_atoi_base.s
+SRC += ft_list_push_front.s
 
 OBJ := $(SRC:.s=.o)
 OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))
