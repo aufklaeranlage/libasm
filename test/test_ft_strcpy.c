@@ -15,7 +15,7 @@ static bool	test_functionality(void)
 	ret = strcpy(buf1, src);
 	ft_ret = ft_strcpy(buf2, src);
 	fprintf(stdout, "src: %s, buf1: %s, buf2: %s, ret: %p ft_ret: %p\n", src, buf1, buf2, ret, ft_ret);
-	return (strcmp(buf1, buf2));
+	return (strcmp(buf1, buf2) == 0);
 }
 
 static bool	test_zero_len(void)
@@ -29,7 +29,7 @@ static bool	test_zero_len(void)
 	ret = strcpy(buf1, src);
 	ft_ret = ft_strcpy(buf2, src);
 	fprintf(stdout, "src: %s, buf1: %s, buf2: %s, ret: %p ft_ret: %p\n", src, buf1, buf2, ret, ft_ret);
-	return (strcmp(buf1, buf2));
+	return (strcmp(buf1, buf2) == 0);
 }
 
 int	main(void)
