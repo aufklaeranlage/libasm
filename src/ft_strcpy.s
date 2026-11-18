@@ -10,9 +10,9 @@ ft_strcpy:
 	xor		rax, rax
 
 .loop:
-	cmp		BYTE rsi[rax], 0x0
-	mov		dl, BYTE rsi[rax]
-	mov		BYTE rdi[rax], dl
+	cmp		BYTE [rsi + rax], 0x0
+	mov		dl, BYTE [rsi + rax]
+	mov		BYTE [rdi + rax], dl
 	je		.end
 	add		rax, 0x1
 	jmp		.loop

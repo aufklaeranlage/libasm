@@ -12,11 +12,11 @@ ft_strcmp:
 	xor		rcx, rcx
 
 .loop:
-	mov		al, BYTE rdi[rcx]
-	mov		r8b, BYTE rsi[rcx]
+	mov		al, BYTE [rdi + rcx]
+	mov		r8b, BYTE [rsi + rcx]
 	sub		eax, r8d
 	jne		.end
-	cmp		BYTE rdi[rcx], 0x0
+	cmp		BYTE [rdi + rcx], 0x0
 	je		.end
 	add		rcx, 0x1
 	jmp		.loop

@@ -16,6 +16,8 @@ SRC += ft_write.s
 SRC += ft_read.s
 SRC += ft_strdup.s
 
+SRC += ft_atoi_base.s
+
 OBJ := $(SRC:.s=.o)
 OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))
 
@@ -50,14 +52,13 @@ ARFLAGS := rsc
 CFLAGS :=
 
 LDFLAGS :=
-LDFLAGS += -L. -l:libasm.l
 LDFLAGS += -z noexecstack # prevents ld complainign about missing .not.GNU-stack
 # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ffcf9c5700e49c0aee42dcba9a12ba21338e8136 
 
 ifdef DEBUG
-	CAFLAGS += -g -F dwarf
+	CAFLAGS += -g -F stabs
 	CAFLAGS += -O0
-	CFLAGS	+= -g3
+	CFLAGS	+= -g -no-pie
 else
 # Minimize branch offsets, and signed immediate bytes, by overriding size specification unless strict is used
 	CAFLAGS += -Ox
@@ -87,8 +88,8 @@ re: fclean all
 
 test: $(NAME) $(TST_OUT)
 
-%.out: %.c
-	$(CC) $(CFLAGS) -Itest -Iinc $< $(LDFLAGS) -o $@
+%.out: %.c $(NAME)
+	$(CC) $(CFLAGS) -Itest -Iinc $< $(OBJ) $(LDFLAGS) -o $@
 	$@ | tee $(patsubst test/test_%.out,test/%.log,$@) 1>/dev/null
 
 cleantest:

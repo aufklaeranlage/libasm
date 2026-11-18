@@ -15,4 +15,6 @@ ssize_t		ft_read(unsigned int fd, char * buf, size_t count);
 
 char		*ft_strdup(const char *s);
 
+int			ft_atoi_base(const char *str, const char *base);
+
 #endif

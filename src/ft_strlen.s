@@ -10,7 +10,7 @@ ft_strlen:
 	xor		rax, rax	; zero rax and use as counter
 
 .loop:
-	cmp		BYTE rdi[rax], 0x0
+	cmp		BYTE [rdi + rax], 0x0
 	je		.end
 	add		rax, 0x1
 	jmp		.loop
