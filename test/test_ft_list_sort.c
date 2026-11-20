@@ -30,8 +30,8 @@ static bool test_sort_strcmp(void) {
   for (int i = 0; i < 4; i++) {
     ft_list_push_front(&head, str[i]);
   }
-  t_list *sorted = ft_list_sort(&head, strcmp);
-  for (t_list *node = sorted; node != NULL; node = node->next) {
+  ft_list_sort(&head, strcmp);
+  for (t_list *node = head; node != NULL; node = node->next) {
     pnode_str(node);
   }
   return ft_list_size(head) == 4;
@@ -49,8 +49,8 @@ static bool test_sort_intcmp(void) {
   for (int i = 0; i < 4; i++) {
     ft_list_push_front(&head, &arr[i]);
   }
-  t_list *sorted = ft_list_sort(&head, intcmp);
-  for (t_list *node = sorted; node != NULL; node = node->next) {
+  ft_list_sort(&head, intcmp);
+  for (t_list *node = head; node != NULL; node = node->next) {
     pnode_int(node);
   }
   return ft_list_size(head) == 4;

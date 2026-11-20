@@ -20,6 +20,7 @@ SRC += ft_atoi_base.s
 SRC += ft_list_push_front.s
 SRC += ft_list_size.s
 SRC += ft_list_sort.s
+SRC += ft_list_remove_if.s
 
 OBJ := $(SRC:.s=.o)
 OBJ := $(addprefix $(OBJ_DIR)/, $(OBJ))
